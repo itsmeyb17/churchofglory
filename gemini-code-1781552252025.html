@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>كنيسة المجد | Church of Glory</title>
+    <!-- Google Fonts for better Arabic typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #D4AF37;
+            --gold-dark: #B5952F;
+            --gold-light: #F9F4E3;
+            --white: #ffffff;
+            --dark-text: #2C2C2C;
+            --glass-bg: rgba(255, 255, 255, 0.85);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--white);
+            color: var(--dark-text);
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: var(--white); }
+        ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 5px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--gold-dark); }
+
+        /* Navbar */
+        header {
+            background: transparent;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.4s ease;
+            padding: 20px 0;
+        }
+
+        header.scrolled {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            padding: 10px 0;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+            max-width: 1200px;
+            margin: auto;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--gold);
+            text-decoration: none;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 35px;
+        }
+
+        .nav-links li a {
+            text-decoration: none;
+            color: var(--dark-text);
+            font-weight: 700;
+            font-size: 18px;
+            position: relative;
+            padding-bottom: 5px;
+            transition: color 0.3s ease;
+        }
+
+        /* Animated Underline for Nav Links */
+        .nav-links li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            right: 0; /* Starts from right for RTL */
+            background-color: var(--gold);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links li a:hover::after { width: 100%; }
+        .nav-links li a:hover { color: var(--gold); }
+
+        /* Language Selector Style */
+        .lang-selector {
+            background: var(--white);
+            border: 2px solid var(--gold);
+            color: var(--dark-text);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            outline: none;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        .lang-selector:hover {
+            background: var(--gold-light);
+            border-color: var(--gold-dark);
+        }
+
+        /* Sections */
+        section {
+            padding: 120px 5% 80px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            z-index: 2;
+        }
+
+        /* Scroll Animation Classes */
+        .hidden {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s ease-out;
+        }
+        .show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h1 {
+            font-size: 64px;
+            color: var(--gold);
+            margin-bottom: 20px;
+            font-weight: 900;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            font-size: 42px;
+            color: var(--gold);
+            margin-bottom: 30px;
+            font-weight: 800;
+            display: inline-block;
+            position: relative;
+        }
+
+        /* Decorative dots next to headers */
+        h2::before, h2::after {
+            content: '❖';
+            color: var(--gold-light);
+            font-size: 20px;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        h2::before { right: -30px; }
+        h2::after { left: -30px; }
+
+        p {
+            font-size: 20px;
+            margin-bottom: 25px;
+            color: #555;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(45deg, var(--gold), var(--gold-dark));
+            color: var(--white);
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 20px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(212, 175, 55, 0.4);
+        }
+
+        /* Home Section - Parallax Effect */
+        #home {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(249, 244, 227, 0.85) 100%), 
+                        url('https://images.unsplash.com/photo-1438032005730-c779502df39b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80') center/cover;
+            background-attachment: fixed;
+            border-bottom: 10px solid var(--gold);
+        }
+
+        /* About Section */
+        #about {
+            background-color: var(--white);
+            position: relative;
+        }
+
+        .about-cards {
+            display: flex;
+            gap: 30px;
+            margin-top: 40px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background: var(--white);
+            padding: 40px 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            flex: 1;
+            min-width: 250px;
+            border-top: 4px solid var(--gold);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+        }
+
+        .card h3 {
+            color: var(--gold);
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+
+        /* Bible Section - Glowing Card Effect */
+        #bible {
+            background-color: var(--gold-light);
+            background-image: radial-gradient(circle at center, var(--white) 0%, transparent 100%);
+        }
+        
+        .verse-card {
+            background: var(--white);
+            padding: 60px 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.15);
+            margin-top: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Decorative Quote Mark */
+        .verse-card::before {
+            content: '"';
+            position: absolute;
+            top: -20px;
+            right: 20px;
+            font-size: 150px;
+            color: var(--gold-light);
+            font-family: serif;
+            opacity: 0.5;
+            z-index: 0;
+        }
+
+        .verse {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--dark-text);
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .reference {
+            display: block;
+            margin-top: 25px;
+            font-size: 22px;
+            font-weight: 900;
+            color: var(--gold);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Contact Section Styles with Social Links */
+        #contact {
+            background-color: var(--white);
+        }
+
+        .contact-wrapper {
+            background: var(--glass-bg);
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            width: 100%;
+            max-width: 600px;
+            margin: 40px auto 0;
+        }
+
+        .social-links {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .social-links .btn {
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(to right, var(--gold-dark), var(--gold));
+            color: var(--white);
+            text-align: center;
+            padding: 30px;
+            font-size: 18px;
+            position: relative;
+        }
+
+        /* Wave SVG for section transition */
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            overflow: hidden;
+            line-height: 0;
+        }
+
+        .wave svg {
+            position: relative;
+            display: block;
+            width: calc(100% + 1.3px);
+            height: 50px;
+        }
+
+        .wave .shape-fill {
+            fill: var(--white);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            h1 { font-size: 42px; }
+            h2 { font-size: 32px; }
+            section { padding-top: 100px; }
+            .verse { font-size: 24px; }
+            .contact-wrapper { padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header / Navbar -->
+    <header id="header">
+        <nav>
+            <a href="#home" class="logo" data-key="logo">كنيسة المجد</a>
+            <ul class="nav-links">
+                <li><a href="#home" data-key="nav-home">الرئيسية</a></li>
+                <li><a href="#about" data-key="nav-about">من نحن</a></li>
+                <li><a href="#bible" data-key="nav-bible">الكتاب المقدس</a></li>
+                <li><a href="#contact" data-key="nav-contact">تواصل معنا</a></li>
+            </ul>
+            <!-- Language Switcher Dropdown -->
+            <select class="lang-selector" onchange="switchLanguage(this.value)">
+                <option value="ar" selected>العربية</option>
+                <option value="en">English</option>
+                <option value="fr">Français</option>
+                <option value="ko">한국어</option>
+            </select>
+        </nav>
+    </header>
+
+    <!-- Home Section -->
+    <section id="home">
+        <div class="container hidden">
+            <h1 data-key="hero-title">مرحباً بكم في كنيسة المجد</h1>
+            <p data-key="hero-desc">كنيسة إلكترونية تجمعنا في محبة المسيح، حيث ننمو معاً في الكلمة والصلاة والشركة الروحية.</p>
+            <a href="#about" class="btn" data-key="hero-btn">اكتشف المزيد</a>
+        </div>
+        <!-- Wave Transition -->
+        <div class="wave">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C59.71,118.08,130.83,121.22,200.5,115.5,241.6,112.16,281.8,98.66,321.39,56.44Z" class="shape-fill"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about">
+        <div class="container hidden">
+            <h2 data-key="about-title">من نحن</h2>
+            <p data-key="about-desc">كنيسة المجد هي مجتمع إلكتروني يهدف إلى الوصول إلى النفوس في كل مكان عبر الإنترنت. نحن نؤمن بقوة الكلمة والصلاة ونسعى لتقديم رسالة الإنجيل الخلاصية بطريقة معاصرة تصل إلى القلوب.</p>
+            
+            <div class="about-cards">
+                <div class="card">
+                    <h3 data-key="vision-title">رؤيتنا</h3>
+                    <p data-key="vision-desc">أن نكون نوراً في العالم الرقمي، نقدم الرجاء والتعليم لكل فرد باحث عن الحق.</p>
+                </div>
+                <div class="card">
+                    <h3 data-key="mission-title">رسالتنا</h3>
+                    <p data-key="mission-desc">بناء جسور المحبة والتواصل الروحي، وتوفير بيئة آمنة للنمو في معرفة المسيح.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bible Section -->
+    <section id="bible">
+        <div class="container hidden">
+            <h2 data-key="bible-title">كلمة الحياة</h2>
+            <p data-key="bible-sub">سراجٌ لرجلي كلامك ونورٌ لسبيلي</p>
+            
+            <div class="verse-card">
+                <p class="verse" data-key="bible-verse">"لأَنَّهُ هكَذَا أَحَبَّ اللهُ الْعَالَمَ حَتَّى بَذَلَ ابْنَهُ الْوَحِيدَ، لِكَيْ لاَ يَهْلِكَ كُلُّ مَنْ يُؤْمِنُ بِهِ، بَلْ تَكُونُ لَهُ الْحَيَاةُ الأَبَدِيَّةُ."</p>
+                <span class="reference" data-key="bible-ref">يوحنا 3: 16</span>
+            </div>
+            <p></p>
+            <a href="https://bible.com" class="btn" data-key="bible-btn">أحصل على الانجيل</a>
+        </div>
+    </section>
+
+    <!-- Contact Section (Social Links Only) -->
+    <section id="contact">
+        <div class="container hidden">
+            <h2 data-key="contact-title">تواصل معنا</h2>
+            <p data-key="contact-desc">يسعدنا تواصلكم معنا وانضمامكم إلينا. تابعونا على منصات التواصل الاجتماعي للمشاركة والشركة الروحية.</p>
+            
+            <div class="contact-wrapper">
+                <div class="social-links">
+                    <a href="https://www.facebook.com/cna.tunisia" target="_blank" class="btn" data-key="fb-btn">صفحتنا على فيسبوك</a>
+                    <a href="https://www.instagram.com/christ_in_tunisia" target="_blank" class="btn" data-key="ig-btn">حسابنا على إنستغرام</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p data-key="footer-text">&copy; 2026 كنيسة المجد. جميع الحقوق محفوظة.</p>
+    </footer>
+
+    <!-- JavaScript for Animations, Header and Translations -->
+    <script>
+        // Change header background on scroll
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Intersection Observer for scroll animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        // Select all elements with the 'hidden' class
+        const hiddenElements = document.querySelectorAll('.hidden');
+        hiddenElements.forEach((el) => observer.observe(el));
+
+        // Language Translation Data
+        const translations = {
+            ar: {
+                logo: "كنيسة المجد",
+                "nav-home": "الرئيسية",
+                "nav-about": "من نحن",
+                "nav-bible": "الكتاب المقدس",
+                "nav-contact": "تواصل معنا",
+                "hero-title": "مرحباً بكم في كنيسة المجد",
+                "hero-desc": "كنيسة إلكترونية تجمعنا في محبة المسيح، حيث ننمو معاً في الكلمة والصلاة والشركة الروحية.",
+                "hero-btn": "اكتشف المزيد",
+                "about-title": "من نحن",
+                "about-desc": "كنيسة المجد هي مجتمع إلكتروني يهدف إلى الوصول إلى النفوس في كل مكان عبر الإنترنت. نحن نؤمن بقوة الكلمة والصلاة ونسعى لتقديم رسالة الإنجيل الخلاصية بطريقة معاصرة تصل إلى القلوب.",
+                "vision-title": "رؤيتنا",
+                "vision-desc": "أن نكون نوراً في العالم الرقمي، نقدم الرجاء والتعليم لكل فرد باحث عن الحق.",
+                "mission-title": "رسالتنا",
+                "mission-desc": "بناء جسور المحبة والتواصل الروحي، وتوفير بيئة آمنة للنمو في معرفة المسيح.",
+                "bible-title": "كلمة الحياة",
+                "bible-sub": "سراجٌ لرجلي كلامك ونورٌ لسبيلي",
+                "bible-verse": '"لأَنَّهُ هكَذَا أَحَبَّ اللهُ الْعَالَمَ حَتَّى بَذَلَ ابْنَهُ الْوَحِيدَ، لِكَيْ لاَ يَهْلِكَ كُلُّ مَنْ يُؤْمِنُ بِهِ، بَلْ تَكُونُ لَهُ الْحَيَاةُ الأَبَدِيَّةُ."',
+                "bible-ref": "يوحنا 3: 16",
+                "bible-btn": "أحصل على الانجيل",
+                "contact-title": "تواصل معنا",
+                "contact-desc": "يسعدنا تواصلكم معنا وانضمامكم إلينا. تابعونا على منصات التواصل الاجتماعي للمشاركة والشركة الروحية.",
+                "fb-btn": "صفحتنا على فيسبوك 📘",
+                "ig-btn": "حسابنا على إنستغرام 📸",
+                "footer-text": "© 2026 كنيسة المجد. جميع الحقوق محفوظة."
+            },
+            en: {
+                logo: "Church of Glory",
+                "nav-home": "Home",
+                "nav-about": "About Us",
+                "nav-bible": "Bible",
+                "nav-contact": "Connect",
+                "hero-title": "Welcome to the Church of Glory",
+                "hero-desc": "An online church gathering us in the love of Christ, where we grow together in Word, prayer, and spiritual fellowship.",
+                "hero-btn": "Discover More",
+                "about-title": "About Us",
+                "about-desc": "The Church of Glory is an online community aiming to reach souls everywhere through the internet. We believe in the power of the Word and prayer, and we seek to deliver the saving message of the Gospel in a contemporary way that touches hearts.",
+                "vision-title": "Our Vision",
+                "vision-desc": "To be a light in the digital world, providing hope and teaching to everyone searching for the truth.",
+                "mission-title": "Our Mission",
+                "mission-desc": "Building bridges of love and spiritual connection, providing a safe environment to grow in the knowledge of Christ.",
+                "bible-title": "Word of Life",
+                "bible-sub": "Your word is a lamp for my feet, a light on my path.",
+                "bible-verse": '"For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life."',
+                "bible-ref": "John 3:16",
+                "bible-btn": "Get the Bible",
+                "contact-title": "Connect With Us",
+                "contact-desc": "We would love to connect with you. Follow us on our social media platforms for fellowship and updates.",
+                "fb-btn": "Our Facebook Page 📘",
+                "ig-btn": "Our Instagram Profile 📸",
+                "footer-text": "© 2026 Church of Glory. All rights reserved."
+            },
+            fr: {
+                logo: "Église de la Gloire",
+                "nav-home": "Accueil",
+                "nav-about": "À Propos",
+                "nav-bible": "Bible",
+                "nav-contact": "Contact",
+                "hero-title": "Bienvenue à l'Église de la Gloire",
+                "hero-desc": "Une église en ligne qui nous rassemble dans l'amour de Christ, où nous grandissons ensemble par la Parole, la prière et la communion spirituelle.",
+                "hero-btn": "Découvrir plus",
+                "about-title": "À Propos de Nous",
+                "about-desc": "L'Église de la Gloire est une communauté en ligne visant à atteindre les âmes partout via Internet. Nous croyons en la puissance de la Parole et de la prière, et nous cherchons à transmettre le message de salut de l'Évangile d'une manière contemporaine qui touche les cœurs.",
+                "vision-title": "Notre Vision",
+                "vision-desc": "Être une lumière dans le monde numérique, offrant de l'espoir et un enseignement à quiconque cherche la vérité.",
+                "mission-title": "Notre Mission",
+                "mission-desc": "Bâtir des ponts d'amour et de connexion spirituelle, offrant un environnement sûr pour grandir dans la connaissance de Christ.",
+                "bible-title": "Parole de Vie",
+                "bible-sub": "Ta parole est une lampe à mes pieds, et une lumière sur mon sentier.",
+                "bible-verse": '"Car Dieu a tant aimé le monde qu\'il a donné son Fils unique, afin que quiconque croit en lui ne périsse point, mais qu\'il ait la vie éternelle."',
+                "bible-ref": "Jean 3:16",
+                "bible-btn": "Obtenir la Bible",
+                "contact-title": "Contactez-nous",
+                "contact-desc": "Nous serions ravis de communier avec vous. Suivez-nous sur nos réseaux sociaux pour rester connectés.",
+                "fb-btn": "Notre Page Facebook 📘",
+                "ig-btn": "Notre Compte Instagram 📸",
+                "footer-text": "© 2026 Église de la Gloire. Tous droits réservés."
+            },
+            ko: {
+                logo: "영광의 교회",
+                "nav-home": "홈",
+                "nav-about": "교회 소개",
+                "nav-bible": "성경",
+                "nav-contact": "소통하기",
+                "hero-title": "영광의 교회에 오신 것을 환영합니다",
+                "hero-desc": "그리스도의 사랑 안에서 우리를 모으는 온라인 교회로, 말씀과 기도, 그리고 영적 교제 안에서 함께 성장해 나갑니다.",
+                "hero-btn": "더 알아보기",
+                "about-title": "교회 소개",
+                "about-desc": "영광의 교회는 인터넷을 통해 전 세계 곳곳의 영혼들에게 다가가고자 하는 온라인 커뮤니티입니다. 우리는 말씀과 기도의 능력을 믿으며, 현대적인 방식으로 마음에 와닿는 복음의 구원 메시지를 전하고자 노력합니다.",
+                "vision-title": "비전",
+                "vision-desc": "디지털 세상에서 빛이 되어 진리를 찾는 모든 이들에게 소망과 가르침을 전하는 것.",
+                "mission-title": "사명",
+                "mission-desc": "사랑과 영적 연결의 다리를 놓고, 그리스도를 아는 지식 안에서 성장할 수 있는 안전한 환경을 제공하는 것.",
+                "bible-title": "생명의 말씀",
+                "bible-sub": "주의 말씀은 내 발에 등이요 내 길에 빛이니이다",
+                "bible-verse": '"하나님이 세상을 이처럼 사랑하사 독생자를 주셨으니 이는 그를 믿는 자마다 멸망하지 않고 영생을 얻게 하려 하심이라."',
+                "bible-ref": "요한복음 3:16",
+                "bible-btn": "성경 가져오기",
+                "contact-title": "문의 및 소통",
+                "contact-desc": "여러분을 환영합니다. 함께 소통하고 교제하기 위해 저희 소셜 미디어 플랫폼을 팔로우해 주세요.",
+                "fb-btn": "페이스북 페이지 방문하기 📘",
+                "ig-btn": "인스타그램 프로필 보기 📸",
+                "footer-text": "© 2026 영광의 교회. 모든 권리 보유."
+            }
+        };
+
+        // Function to switch languages dynamically
+        function switchLanguage(lang) {
+            document.documentElement.lang = lang;
+            
+            // Adjust page direction based on language layout (RTL for Arabic, LTR for others)
+            document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
+
+            const elements = document.querySelectorAll('[data-key]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (translations[lang][key]) {
+                    el.innerHTML = translations[lang][key];
+                }
+            });
+        }
+    </script>
+</body>
+</html>
